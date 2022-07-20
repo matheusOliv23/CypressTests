@@ -6,6 +6,9 @@ const incrementSelector = "[aria-label=increment]";
 const decrementSelector = "[aria-label=decrement]";
 
 describe("<Stepper>", () => {
+
+
+
   it("mounts", () => {
     cy.mount(<Stepper />);
   });
@@ -39,5 +42,12 @@ describe("<Stepper>", () => {
     cy.get(counterSelector).should("have.text", "101");
     cy.get(decrementSelector).click().click();
     cy.get(counterSelector).should("have.text", "99");
+  });
+
+  it("clicando em + causa uma mudança de evento com o valor incrementado", () => {
+    const onChangeSpy = cy.spy().as("onChangeSpy");
+    cy.mount(<Stepper onClick={onChangeSpy} />);
+    cy.get(incrementSelector).click();
+    cy.get("@onChangeSpy").should("have.been.calledWith", 1);
   });
 });
